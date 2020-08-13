@@ -1,3 +1,4 @@
+#pragma once
 #include "DynamicArray.h"
 
 template <typename T>
@@ -31,11 +32,49 @@ int DynamicArray<T>::getSize()
 }
 
 template<typename T>
+int DynamicArray<T>::getCapacity()
+{
+	return capacity;
+}
+
+template<typename T>
+bool DynamicArray<T>::isEmpty()
+{
+	return size == 0;
+}
+
+template<typename T>
+void DynamicArray<T>::reserve(int capacity)
+{
+	// same size
+	if (this->capacity == capacity) return;
+
+	this->capacity = capacity;
+	T* arr = new T[capacity];
+
+	// copy old
+	for (int i = 0; i < capacity && i < this->size; i++)
+		arr[i] = this->arr[i];
+
+	if (capacity < this->size)
+		this->size = capacity;
+
+	delete[] this->arr;
+	this->arr = arr;
+}
+
+template<typename T>
+void DynamicArray<T>::shrink()
+{
+	reserve(size);
+}
+
+template<typename T>
 void DynamicArray<T>::push_back(T element)
 {
 	// check capacity
 	if (size == capacity)
-		resize(capacity * 2);
+		reserve(capacity * 2);
 
 	// add element
 	arr[size++] = element;
@@ -50,7 +89,7 @@ void DynamicArray<T>::insert(T element, int index)
 
 	// check capacity
 	if (size == capacity)
-		resize(capacity * 2);
+		reserve(capacity * 2);
 
 	// shift
 	for (int i = size; i > index; i--)
@@ -62,13 +101,39 @@ void DynamicArray<T>::insert(T element, int index)
 }
 
 template<typename T>
-T DynamicArray<T>::at(int index)
+T & DynamicArray<T>::operator[](int index)
+{
+	return at(index);
+}
+
+template<typename T>
+T & DynamicArray<T>::at(int index)
 {
 	// check index 
 	if (index < 0 || index >= size)
 		throw "Index Out of Bounds";
 
 	return arr[index];
+}
+
+template<typename T>
+T DynamicArray<T>::front()
+{
+	// check emptiness
+	if (size == 0)
+		throw "Empty List";
+
+	return arr[0];
+}
+
+template<typename T>
+T DynamicArray<T>::back()
+{
+	// check emptiness
+	if (size == 0)
+		throw "Empty List";
+
+	return arr[size - 1];
 }
 
 template<typename T>
@@ -79,12 +144,6 @@ void DynamicArray<T>::clear()
 }
 
 template<typename T>
-bool DynamicArray<T>::isEmpty()
-{
-	return size == 0;
-}
-
-template<typename T>
 T DynamicArray<T>::pop_back()
 {
 	// check emtiness
@@ -92,8 +151,8 @@ T DynamicArray<T>::pop_back()
 		throw "Empty Array";
 
 	// check capacity
-	if (capacity > 4 * length)
-		resize(capacity / 2);
+	if (capacity > 4 * size)
+		reserve(capacity / 2);
 
 	return arr[--size];
 }
@@ -107,7 +166,7 @@ T DynamicArray<T>::erase(int index)
 
 	// check capacity
 	if (capacity > 4 * size)
-		resize(capacity / 2);
+		reserve(capacity / 2);
 	
 	T temp = arr[index];
 	// shift 
@@ -118,34 +177,14 @@ T DynamicArray<T>::erase(int index)
 	return temp;
 }
 
-template<typename T>
-void DynamicArray<T>::shrink()
-{
-	resize(size);
+
+// overload the operator << to work with this object
+template<class T>
+std::ostream & operator<<(std::ostream & out, DynamicArray<T>& x) {
+	out << "{";
+	for (int i = 0; i < x.getSize() - 1; i++) {
+		out << x[i] << ", ";
+	}
+	out << x[x.getSize() - 1] << "}";
+	return out;
 }
-
-template<typename T>
-void DynamicArray<T>::resize(int size)
-{
-	// same size
-	if (mCapacity == size) return;
-
-	capacity = size;
-	T* arr = new T[capacity];
-
-	// copy old
-	for (int i = 0; i < size && i < this->size; i++)
-		arr[i] = this->arr[i];
-
-	if (size < this->size)
-		this->size = size;
-
-	delete[] this->arr;
-	this->arr = arr;
-}
-
-
-
-
-
-
