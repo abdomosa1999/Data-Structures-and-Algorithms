@@ -70,7 +70,7 @@ void DynamicArray<T>::shrink()
 }
 
 template<typename T>
-void DynamicArray<T>::push_back(T element)
+void DynamicArray<T>::pushBack(T element)
 {
 	// check capacity
 	if (size == capacity)
@@ -144,7 +144,7 @@ void DynamicArray<T>::clear()
 }
 
 template<typename T>
-T DynamicArray<T>::pop_back()
+T DynamicArray<T>::popBack()
 {
 	// check emtiness
 	if (size == 0)

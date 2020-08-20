@@ -30,9 +30,9 @@ public:
 
 	// modify
 	// =
-	void push_back(T element);
+	void pushBack(T element);
 	void insert(T element, int index);
-	T pop_back();
+	T popBack();
 	T erase(int index);
 	void clear();
 	
