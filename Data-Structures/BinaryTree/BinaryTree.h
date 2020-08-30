@@ -1,11 +1,17 @@
 #pragma once
+template <typename T> class BinaryTree;
+
+template <typename T>
+class Node {
+
+};
 
 template <typename T>
 class BinaryTree {
-	class Node;
-	Node* root;
+	Node<T> * root;
 public:
 	BinaryTree();
+	~BinaryTree();
 	int size();
 	void insert(T element);
 	void insert(T element, T after);

@@ -4,14 +4,17 @@
 #include "Data-Structures/LinkedList/LinkedList.h"
 #include "Data-Structures/LinkedList/LinkedList.cpp"
 #include "Data-Structures/SkipList/SkipList.h"
+#include "Data-Structures/Stack/Stack.h"
+#include "Data-Structures/Stack/Stack.cpp"
 using namespace std;
 
 void DynamicArrayTest();
 void LinkedListTest();
 void SkipListTest();
+void StackTest();
 
 int main() {
-	SkipListTest();
+	StackTest();
 }
 
 void DynamicArrayTest() {
@@ -53,4 +56,17 @@ void SkipListTest() {
 	list.erase(2);
 	list.erase(5);
 	list.print();
+}
+
+void StackTest() {
+	Stack<int> stack;
+	stack.push(1);
+	stack.push(2);
+	stack.push(3);
+	stack.push(4);
+	stack.push(5);
+	stack.print();
+	stack.pop();
+	stack.pop();
+	stack.print();
 }
