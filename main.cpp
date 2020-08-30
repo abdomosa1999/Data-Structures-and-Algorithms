@@ -3,13 +3,15 @@
 #include "Data-Structures/DynamicArray/DynamicArray.cpp"
 #include "Data-Structures/LinkedList/LinkedList.h"
 #include "Data-Structures/LinkedList/LinkedList.cpp"
+#include "Data-Structures/SkipList/SkipList.h"
 using namespace std;
 
 void DynamicArrayTest();
 void LinkedListTest();
+void SkipListTest();
 
 int main() {
-	LinkedListTest();
+	SkipListTest();
 }
 
 void DynamicArrayTest() {
@@ -28,7 +30,7 @@ void DynamicArrayTest() {
 }
 
 void LinkedListTest() {
-	LinkedList<long> list;
+	LinkedList<int> list;
 	list.pushBack(1);
 	list.pushBack(2);
 	list.pushBack(4);
@@ -38,4 +40,17 @@ void LinkedListTest() {
 	list.erase(2);
 	list.popBack();
 	cout << list << endl;
+}
+
+void SkipListTest() {
+	SkipList list;
+	list.insert(1);
+	list.insert(2);
+	list.insert(4);
+	list.insert(5);
+	list.insert(3);
+	list.print();
+	list.erase(2);
+	list.erase(5);
+	list.print();
 }

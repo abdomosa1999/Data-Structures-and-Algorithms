@@ -5,31 +5,31 @@ using namespace std;
 
 template <typename T> class LinkedList;
 
-// a class for the Node data type
+// a class for the LinkedNode data type
 template <typename T>
-class Node {
+class LinkedNode {
 	T data; 
-	Node* next; 
-	Node* previous;
+	LinkedNode* next; 
+	LinkedNode* previous;
 
 	friend LinkedList<T>;
 	
 public:
 	// a constructor to initialize fields
-	Node(T element);
+	LinkedNode(T element);
 };
 
 
 template <typename T>
 class LinkedList
 {
-	Node<T>* head; // address of first node
-	Node<T>* tail; // address of last node
+	LinkedNode<T>* head; // address of first node
+	LinkedNode<T>* tail; // address of last node
 	int size; // additional feild to decrease time complexity
 
 	// private helpful methods to use
-	Node<T> * iterate(int index);
-	Node<T> * iterate(T element);
+	LinkedNode<T> * iterateToIndex(int index);
+	LinkedNode<T> * iterateToElement(T element);
 
 public:
 	LinkedList();

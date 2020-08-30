@@ -1,10 +1,15 @@
+#pragma once
 #include "SkipList.h"
 
+SkipNode::SkipNode(int element) {
+	data = element;
+	right = left = up = down = NULL;
+}
 
 
-SkipList::Node * SkipList::iterate(int element)
+SkipNode * SkipList::iterate(int element)
 {
-	Node* current = head;
+	SkipNode* current = head;
 	while (true) {
 		while (current->right->data != INT_MAX && current->right->data <= element)
 			current = current->right;
@@ -18,7 +23,7 @@ SkipList::Node * SkipList::iterate(int element)
 
 SkipList::SkipList()
 {
-	Node* nInfinity = new Node(INT_MIN), *pInfinity = new Node(INT_MAX);
+	SkipNode* nInfinity = new SkipNode(INT_MIN), *pInfinity = new SkipNode(INT_MAX);
 	nInfinity->right = pInfinity;
 	pInfinity->left = nInfinity;
 	head = nInfinity;
@@ -37,17 +42,17 @@ SkipList::~SkipList()
 void SkipList::insert(int element)
 {
 	int currentLevel = 0;
-	Node *current = iterate(element);
+	SkipNode *current = iterate(element);
 	if (current->data == element) return;
-	Node* newNode = new Node(element);
-	newNode->left = current;
-	newNode->right = current->right;
-	current->right->left = newNode;
-	current->right = newNode;
+	SkipNode* newSkipNode = new SkipNode(element);
+	newSkipNode->left = current;
+	newSkipNode->right = current->right;
+	current->right->left = newSkipNode;
+	current->right = newSkipNode;
 
 	while ((rand() % 10) < 5) {
 		if (currentLevel >= height) {
-			Node* nInfinity = new Node(INT_MIN), *pInfinity = new Node(INT_MAX);
+			SkipNode* nInfinity = new SkipNode(INT_MIN), *pInfinity = new SkipNode(INT_MAX);
 			nInfinity->right = pInfinity;
 			pInfinity->left = nInfinity;
 			nInfinity->down = head;
@@ -62,15 +67,15 @@ void SkipList::insert(int element)
 			current = current->left;
 
 		current = current->up;
-		Node* upperNode = new Node(element);
-		upperNode->left = current;
-		upperNode->right = current->right;
-		if (current->right != NULL) current->right->left = upperNode;
-		current->right = upperNode;
-		upperNode->down = newNode;
-		newNode->up = upperNode;
+		SkipNode* upperSkipNode = new SkipNode(element);
+		upperSkipNode->left = current;
+		upperSkipNode->right = current->right;
+		if (current->right != NULL) current->right->left = upperSkipNode;
+		current->right = upperSkipNode;
+		upperSkipNode->down = newSkipNode;
+		newSkipNode->up = upperSkipNode;
 
-		newNode = upperNode;
+		newSkipNode = upperSkipNode;
 		currentLevel++;
 	}
 	size++;
@@ -81,15 +86,15 @@ bool SkipList::search(int element)
 	return iterate(element)->data == element;
 }
 
-bool SkipList::remove(int element)
+bool SkipList::erase(int element)
 {
-	Node* current = iterate(element);
+	SkipNode* current = iterate(element);
 	if (current->data != element) return false;
 
 	while (current != NULL) {
 		current->left->right = current->right;
 		current->right->left = current->left;
-		Node* temp = current->up;
+		SkipNode* temp = current->up;
 		delete current;
 		current = temp;
 	}
@@ -99,7 +104,7 @@ bool SkipList::remove(int element)
 
 void SkipList::clear()
 {
-	Node* current = head, *temp1, *temp2;
+	SkipNode* current = head, *temp1, *temp2;
 	while (current->down != NULL)
 		current = current->down;
 	while (current != NULL) {
@@ -122,7 +127,7 @@ int SkipList::getSize()
 
 void SkipList::print()
 {
-	Node* current = head, *start = head;
+	SkipNode* current = head, *start = head;
 	while (true) {
 		while (current != NULL) {
 			if (current->data != INT_MAX && current->data != INT_MIN)

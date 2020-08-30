@@ -1,17 +1,18 @@
+#pragma once
 #include "LinkedList.h"
 #include <iostream>
 
 template <typename T>
-Node<T>::Node(T element) {
+LinkedNode<T>::LinkedNode(T element) {
 		data = element;
 		next = nullptr;
 		previous = nullptr;
 }
 
 template <typename T>
-Node<T> * LinkedList<T>::iterate(int index)
+LinkedNode<T> * LinkedList<T>::iterateToIndex(int index)
 {
-	Node<T> * current;
+	LinkedNode<T> * current;
 	// choose which end to iterate from to reduce complexity
 	if (index < size / 2) {
 		current = head;
@@ -25,9 +26,9 @@ Node<T> * LinkedList<T>::iterate(int index)
 }
 
 template<typename T>
-Node<T> * LinkedList<T>::iterate(T element)
+LinkedNode<T> * LinkedList<T>::iterateToElement(T element)
 {
-	Node<T> * current;
+	LinkedNode<T> * current;
 	current = head;
 	for (int i = 0; i < size; current = current->next, i++)
 		if (current->data == element)
@@ -76,7 +77,7 @@ T LinkedList<T>::at(int index)
 {
 	if (index < 0 || index >= size)
 		throw "Index Out of Bounds";
-	return iterate(index)->data;
+	return iterateToIndex(index)->data;
 }
 
 template<typename T>
@@ -95,14 +96,14 @@ void LinkedList<T>::insert(T element, int index)
 	}
 
 	else {
-		Node<T> * newNode = new Node<T>(element);
-		Node<T> * current, *temp;
-		current = iterate(index);
+		LinkedNode<T> * newLinkedNode = new LinkedNode<T>(element);
+		LinkedNode<T> * current, *temp;
+		current = iterateToIndex(index);
 		temp = current->previous;
-		current->previous = newNode;
-		newNode->next = current;
-		newNode->previous = temp;
-		temp->next = newNode;
+		current->previous = newLinkedNode;
+		newLinkedNode->next = current;
+		newLinkedNode->previous = temp;
+		temp->next = newLinkedNode;
 		size++;
 	}
 }
@@ -110,14 +111,14 @@ void LinkedList<T>::insert(T element, int index)
 template<typename T>
 void LinkedList<T>::pushFront(T element)
 {
-	Node<T>* newNode = new Node<T>(element);
+	LinkedNode<T>* newLinkedNode = new LinkedNode<T>(element);
 	if (isEmpty()) {
-		head = tail = newNode;
+		head = tail = newLinkedNode;
 	}
 	else {
-		newNode->next = head;
-		head->previous = newNode;
-		head = newNode;
+		newLinkedNode->next = head;
+		head->previous = newLinkedNode;
+		head = newLinkedNode;
 	}
 	size++;
 }
@@ -125,14 +126,14 @@ void LinkedList<T>::pushFront(T element)
 template<typename T>
 void LinkedList<T>::pushBack(T element)
 {
-	Node<T>* newNode = new Node<T>(element);
+	LinkedNode<T>* newLinkedNode = new LinkedNode<T>(element);
 	if (isEmpty()) {
-		head = tail = newNode;
+		head = tail = newLinkedNode;
 	}
 	else {
-		tail->next = newNode;
-		newNode->previous = tail;
-		tail = newNode;
+		tail->next = newLinkedNode;
+		newLinkedNode->previous = tail;
+		tail = newLinkedNode;
 	}
 	size++;
 }
@@ -140,13 +141,13 @@ void LinkedList<T>::pushBack(T element)
 template<typename T>
 bool LinkedList<T>::contains(T element)
 {
-	return iterate(element) != nullptr;
+	return iterateToElement(element) != nullptr;
 }
 
 template<typename T>
 void LinkedList<T>::erase(T element)
 {
-	Node<T> * current = iterate(element);
+	LinkedNode<T> * current = iterateToElement(element);
 	if (current == nullptr)
 		return;
 
@@ -171,7 +172,7 @@ T LinkedList<T>::popFront()
 	if (isEmpty()) 
 		throw "Empty List";
 
-	Node<T> * current = head;
+	LinkedNode<T> * current = head;
 	if (size == 1) {
 		head = tail = nullptr;
 	}
@@ -191,7 +192,7 @@ T LinkedList<T>::popBack()
 	if (isEmpty()) 
 		throw "Empty List";
 
-	Node<T> * current = tail;
+	LinkedNode<T> * current = tail;
 	if (size == 1) {
 		head = tail = nullptr;
 	}
@@ -212,14 +213,14 @@ void LinkedList<T>::update(int index, T element)
 	if (index < 0 || index >= size)
 		throw "Index Out of Bounds";
 
-	Node<T> * current = iterate(index);
+	LinkedNode<T> * current = iterateToIndex(index);
 	current->data = element; // update the value
 }
 
 template<typename T>
 void LinkedList<T>::reverse()
 {
-	Node<T> * current = head, *temp;
+	LinkedNode<T> * current = head, *temp;
 	head = tail;
 	tail = current;
 	// traverse from the begining and swap every next and previous
@@ -234,8 +235,8 @@ void LinkedList<T>::reverse()
 template<typename T>
 void LinkedList<T>::clear()
 {
-	Node<T> * current = head;
-	Node<T> * temp;
+	LinkedNode<T> * current = head;
+	LinkedNode<T> * temp;
 	for (int i = 0; i < size; i++) {
 		temp = current->next;
 		delete current;
