@@ -1,65 +1,92 @@
+#include "Queue.h"
 #include <iostream>
 using namespace std;
 
 template <typename T>
-class Queue {
-	class Node {
-	public:
-		T data;
-		Node *next, *prev;
-		Node(T element) {
-			data = element;
-			next = prev = NULL;
-		}
-	};
+QueueNode<T>::QueueNode(T element) {
+	data = element;
+	next = prev = NULL;
+}
 
-	Node *head, *tail;
+template <typename T>
+Queue<T>::Queue() {
+	head = tail = NULL;
+	size = 0;
+}
 
-public:
-	Queue() {
-		head = tail = NULL;
-	}
-
-	~Queue() {
-		Node* it = head;
-		while (it != NULL)
-		{
-			Node* temp = it;
-			it = it->next;
-			delete temp;
-		}
-	}
-
-	void enqueue(T element) {
-		Node* newNode = new Node(element);
-		newNode->next = head;
-		if (head != NULL)
-			head->prev = newNode;
-		else
-			tail = newNode;
-		head = newNode;
-	}
-
-	T dequeue()
+template <typename T>
+Queue<T>::~Queue() {
+	QueueNode<T> * it = head;
+	while (it != NULL)
 	{
-		if (head == NULL)
-			throw "Empty Stack!";
-		Node* temp = tail;
-		T element = tail->data;
-		tail = tail->prev;
-		tail->next = NULL;
+		QueueNode<T> * temp = it;
+		it = it->next;
 		delete temp;
-		return element;
 	}
+}
 
-	void print()
+template<typename T>
+bool Queue<T>::isEmpty()
+{
+	return (size == 0);
+}
+
+template<typename T>
+int Queue<T>::getSize()
+{
+	return size;
+}
+
+template<typename T>
+T Queue<T>::front()
+{
+	if (isEmpty())
+		throw "Empty Queue";
+	return head->data;
+}
+
+template<typename T>
+T Queue<T>::back()
+{
+	if (isEmpty())
+		throw "Empty Queue";
+	return tail->data;
+}
+
+template <typename T>
+void Queue<T>::enqueue(T element) {
+	QueueNode<T> * newNode = new QueueNode<T>(element);
+	newNode->next = head;
+	if (head != NULL)
+		head->prev = newNode;
+	else
+		tail = newNode;
+	head = newNode;
+	size++;
+}
+
+template <typename T>
+T Queue<T>::dequeue()
+{
+	if (isEmpty())
+		throw "Empty Queue!";
+	QueueNode<T> * temp = tail;
+	T element = tail->data;
+	tail = tail->prev;
+	tail->next = NULL;
+	delete temp;
+	size--;
+	return element;
+}
+
+template <typename T>
+void Queue<T>::print()
+{
+	QueueNode<T> * it = head;
+	while (it != NULL)
 	{
-		Node* it = head;
-		while (it != NULL)
-		{
-			cout << it->data << ", ";
-			it = it->next;
-		}
-		cout << endl;
+		cout << it->data << ", ";
+		it = it->next;
 	}
-};
+	cout << endl;
+}
